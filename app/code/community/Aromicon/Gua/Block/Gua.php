@@ -27,10 +27,20 @@ class Aromicon_Gua_Block_Gua extends Mage_Core_Block_Template
 
     public function _isEcommerce()
     {
-        Mage::log($this->getRequest()->getPathInfo());
+        $successPath =  Mage::getStoreConfig('aromicon_gua/ecommerce/success_url') != "" ? Mage::getStoreConfig('aromicon_gua/ecommerce/success_url') : '/checkout/onepage/success';
         if(Mage::getStoreConfigFlag('aromicon_gua/ecommerce/enable')
-            && $this->getRequest()->getPathInfo() == '/checkout/onepage/success/'){
+            && strpos($this->getRequest()->getPathInfo(), $successPath) !== false){
                 return true;
+        }
+        return false;
+    }
+
+    public function _isCheckout()
+    {
+        $checkoutPath =  Mage::getStoreConfig('aromicon_gua/ecommerce/checkout_url') != "" ?  Mage::getStoreConfig('aromicon_gua/ecommerce/checkout_url') : '/checkout/onepage';
+        if(Mage::getStoreConfigFlag('aromicon_gua/ecommerce/funnel_enable')
+            && strpos($this->getRequest()->getPathInfo(), $checkoutPath) !== false){
+            return true;
         }
         return false;
     }

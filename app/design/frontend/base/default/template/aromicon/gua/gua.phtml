@@ -9,11 +9,24 @@
         ga('create', '<?php echo $this->_getAccountId(); ?>', '<?php echo $this->getRequest()->getHttpHost() ?>');
         ga('set', 'anonymizeIp', <?php echo $this->_isAnonymizeIp()?>);
         ga('send', 'pageview');
+        <?php if($this->_isCheckout()): ?>
+        Event.observe(window, 'load', function() {
+            Checkout.prototype.gotoSection = function(section){
+                    var sectionElement = $('opc-'+section);
+                    sectionElement.addClassName('allow');
+                    this.accordion.openSection('opc-'+section);
+                    this.reloadProgressBlock(section);
+                    /**aromicon gua code*/
+                    try{ga('send', 'pageview', {'page': '<?php echo $this->getCheckoutUrl() ?>/'+section,'title': section});}catch(e){
+                        console.log(e);
+                    }
+            };
+        });
+        <?php endif;?>
         <?php if($this->_isEcommerce()): ?>
         ga('require', 'ecommerce', 'ecommerce.js');
         <?php $_order = $this->getOrder();?>
-        ga('set', 'currencyCode', '<?php echo $_order->getOrderCurrencyCode();?>');
-        ga('ecommerce:addTransaction', { 'id': '<?php echo $_order->getData($this->getTransactionIdField())?>', 'affiliation': '<?php echo Mage::app()->getStore()->getName() ?>', 'revenue': '<?php echo $_order->getGrandTotal()?>', 'shipping': '<?php echo $_order->getShippingInclTax()?>', 'tax': '<?php echo  $_order->getTaxAmount()?>'});
+        ga('ecommerce:addTransaction', { 'id': '<?php echo $_order->getData($this->getTransactionIdField())?>', 'affiliation': '<?php echo Mage::app()->getStore()->getName() ?>', 'revenue': '<?php echo $_order->getGrandTotal()?>', 'shipping': '<?php echo $_order->getShippingInclTax()?>', 'tax': '<?php echo  $_order->getTaxAmount()?>', 'currency': '<?php echo $_order->getOrderCurrencyCode();?>'});
         <?php foreach($_order->getAllItems() as $_item): ?>
         <?php if($_item->getParentItem()) continue; ?>
         ga('ecommerce:addItem', {'id': '<?php echo $_order->getData($this->getTransactionIdField()) ?>', 'name': '<?php echo str_replace('\'','', $_item->getName()) ?>', 'sku': '<?php echo $_item->getSku() ?>', 'price': '<?php echo $_item->getPrice() ?>', 'quantity': '<?php echo (int) $_item->getQtyOrdered() ?>'});
