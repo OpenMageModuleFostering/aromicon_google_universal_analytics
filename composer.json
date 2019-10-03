@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/Aromicon_Google_Universal_Analytics",
+    "name": "OpenMageModuleFostering\/Aromicon_Google_Universal_Analytics",
     "type": "magento-module",
     "license": "COMMERCIAL-SOFTWARE-LICENSE-(v1.0)",
     "homepage": "",
     "description": "Adds new Google Universal Analytics to Magento Store.",
     "authors": [
-    {
-        "name": "Stefan Richter",
-        "email": "kontakt@aromicon.com"
-    }
-],
+        {
+            "name": "Stefan Richter",
+            "email": "kontakt@aromicon.com"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
